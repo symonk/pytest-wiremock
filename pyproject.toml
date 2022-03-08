@@ -13,6 +13,7 @@ readme = "README.rst"
 python = "^3.8"
 pytest = "^7.0.0"
 httpx = "^0.22.0"
+marshmallow = "^3.14.1"
 
 [tool.poetry.dev-dependencies]
 codecov = "^2.1.12"
