@@ -34,7 +34,7 @@ class WiremockClient:
         self.client = httpx.Client(base_url=self.host, timeout=timeout)
         self.dispatcher = dispatcher(self.client)
 
-    @success_when(204)
+    @success_when(200)
     def reset(self) -> httpx.Response:
         return self.dispatcher(method="POST", url="/reset")
 
