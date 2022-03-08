@@ -42,6 +42,14 @@ class WiremockClient(AbstractContextManager):
         )
 
     @success_when(200)
+    def set_global_fixed_delay(self, delay: int) -> httpx.Response:
+        """
+        Set a global fixed delay across all stubs.  To provider this on a per stub basis
+        configure the stub when creating one instead.
+        """
+        return self(method=HTTP_POST, url="/settings", payload={"fixedDelay": delay})
+
+    @success_when(200)
     def reset(self) -> httpx.Response:
         """Reset mappings to the default state and reset the request journal"""
         return self(method=HTTP_POST, url="/reset")
