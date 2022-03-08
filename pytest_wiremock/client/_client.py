@@ -33,14 +33,11 @@ class WiremockClient(AbstractContextManager):
     def shutdown(self) -> httpx.Response:
         return self(method=HTTP_POST, url="/shutdown")
 
-    def close_client(self) -> None:
-        self.client.close()
-
     def __call__(self, method: str, url: str, payload: typing.Optional[typing.Any] = None):
         return self.client.request(method=method, url=url, json=payload)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.close_client()
+        self.client.close()
 
     def __del__(self) -> None:
-        self.close_client()
+        self.client.close()
