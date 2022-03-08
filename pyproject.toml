@@ -1,0 +1,57 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "pytest_wiremock"
+version = "0.0.1"
+description = "A pytest plugin for programmatically using wiremock in integration tests"
+authors = ["symonk <jackofspaces@gmail.com>"]
+readme = "README.rst"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pytest = "^7.0.0"
+
+[tool.poetry.dev-dependencies]
+codecov = "^2.1.12"
+ipython = "^8.0.1"
+pre-commit = "^2.16.0"
+pytest-cov = "^3.0.0"
+mkdocs = "^1.2.3"
+mkdocs-material = "^8.1.10"
+mkdocstrings = "^0.18.0"
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = 'True'
+force_grid_wrap = 0
+use_parentheses = 'True'
+ensure_newline_before_comments = 'True'
+line_length = 120
+force_single_line = 'True'
+known_first_party = 'pytest_wiremock'
+default_section = 'THIRDPARTY'
+forced_separate = 'tests'
+skip = '.tox,.eggs,ci/templates'
+
+[tool.mypy]
+mypy_path = 'pytest_wiremock'
+check_untyped_defs = 'True'
+disallow_any_generics = 'True'
+ignore_missing_imports = 'False'
+show_error_codes = 'True'
+strict_equality = 'True'
+warn_redundant_casts = 'True'
+warn_return_any = 'False'
+warn_unreachable = 'True'
+warn_unused_configs = 'True'
+no_implicit_reexport = 'False'
+ignore_errors = 'False'
+
+[tool.black]
+target-version = ['py38']
+line-length = 120
+
+[tool.flake8]
+# flake8 does not currently support pyproject.toml (handle via pre-commit directly).
