@@ -22,6 +22,7 @@ pytest-cov = "^3.0.0"
 mkdocs = "^1.2.3"
 mkdocs-material = "^8.1.10"
 mkdocstrings = "^0.18.0"
+tox = "^3.24.5"
 
 [tool.isort]
 multi_line_output = 3

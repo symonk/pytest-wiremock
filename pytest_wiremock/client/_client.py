@@ -4,7 +4,7 @@ import typing
 
 import httpx
 
-from .decorators import success_when
+from ._decorators import success_when
 
 
 class RequestDispatcher:
