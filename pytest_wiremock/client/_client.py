@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import typing
+from contextlib import AbstractContextManager
 
 import httpx
 
@@ -8,15 +9,7 @@ from ._constants import HTTP_POST
 from ._decorators import success_when
 
 
-class RequestDispatcher:
-    def __init__(self, client: httpx.Client):
-        self.client = client
-
-    def __call__(self, method: str, url: str, payload: typing.Optional[typing.Any] = None) -> httpx.Response:
-        return self.client.request(method, url, json=payload)
-
-
-class WiremockClient:
+class WiremockClient(AbstractContextManager):
     """
     A (synchronous) python client for the wiremock admin API.
 
@@ -28,23 +21,23 @@ class WiremockClient:
     # Todo: Check the host initially and gracefully error rather than raise ConnectError for conn ref.
     """
 
-    def __init__(
-        self, host: str, port: int, dispatcher: typing.Type[typing.Callable] = RequestDispatcher, timeout: float = 30.00
-    ) -> None:
+    def __init__(self, host: str, port: int, timeout: float = 30.00) -> None:
         self.host = f"http://{host}:{port}/__admin/"
         self.client = httpx.Client(base_url=self.host, timeout=timeout)
-        self.dispatcher = dispatcher(self.client)
 
     @success_when(200)
     def reset(self) -> httpx.Response:
-        return self.dispatcher(method=HTTP_POST, url="/reset")
+        return self(method=HTTP_POST, url="/reset")
 
-    @success_when(201)
+    @success_when(200)
     def shutdown(self) -> httpx.Response:
-        return self.dispatcher(method=HTTP_POST, url="/shutdown")
+        return self(method=HTTP_POST, url="/shutdown")
 
-    def __enter__(self) -> WiremockClient:
-        return self
+    def __call__(self, method: str, url: str, payload: typing.Optional[typing.Any] = None):
+        return self.client.request(method=method, url=url, json=payload)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        self.client.close()
+
+    def __del__(self) -> None:
         self.client.close()
