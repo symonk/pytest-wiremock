@@ -4,6 +4,7 @@ import typing
 
 import httpx
 
+from ._constants import HTTP_POST
 from ._decorators import success_when
 
 
@@ -36,11 +37,11 @@ class WiremockClient:
 
     @success_when(200)
     def reset(self) -> httpx.Response:
-        return self.dispatcher(method="POST", url="/reset")
+        return self.dispatcher(method=HTTP_POST, url="/reset")
 
     @success_when(201)
     def shutdown(self) -> httpx.Response:
-        return self.dispatcher(method="POST", url="/shutdown")
+        return self.dispatcher(method=HTTP_POST, url="/shutdown")
 
     def __enter__(self) -> WiremockClient:
         return self
