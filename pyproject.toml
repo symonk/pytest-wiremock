@@ -11,7 +11,7 @@ readme = "README.rst"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-pytest = "^7.0.0"
+pytest = "^6.2.4"
 httpx = "^0.22.0"
 marshmallow = "^3.14.1"
 
@@ -24,6 +24,10 @@ mkdocs = "^1.2.3"
 mkdocs-material = "^8.1.10"
 mkdocstrings = "^0.18.0"
 tox = "^3.24.5"
+pytest-docker = "^0.10.3"
+
+[tool.poetry.plugins.pytest11]
+pytest-wiremock = "pytest_wiremock.plugin"
 
 [tool.isort]
 multi_line_output = 3

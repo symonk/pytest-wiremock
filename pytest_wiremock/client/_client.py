@@ -5,13 +5,12 @@ from contextlib import AbstractContextManager
 
 import httpx
 
+from ._constants import HTTP_GET
 from ._constants import HTTP_POST
 from ._decorators import success_when
-from ._models import LogNormalSettingsModel
-from ._schemas import LogNormalSettingsSchema
-from ._schemas import WmSchema
-
-_SETTINGS_ALIAS = typing.Union[LogNormalSettingsModel]
+from ._models_schemas import FixedDelay
+from ._models_schemas import FixedDelaySchema
+from ._models_schemas import WmSchema
 
 
 class WiremockClient(AbstractContextManager):
@@ -31,23 +30,18 @@ class WiremockClient(AbstractContextManager):
         self.client = httpx.Client(base_url=self.host, timeout=timeout)
 
     @success_when(200)
-    def update_settings(self, model: _SETTINGS_ALIAS) -> httpx.Response:
-        """Update global settings"""
-        return self(
-            method=HTTP_POST,
-            url="/settings",
-            schema=LogNormalSettingsSchema,
-            schema_kw={"only": ["fixed_delay"]},
-            payload=model,
-        )
+    def get_settings(self) -> httpx.Response:
+        return self(method=HTTP_GET, url="/settings")
 
     @success_when(200)
-    def set_global_fixed_delay(self, delay: int) -> httpx.Response:
+    def set_fixed_delay(self, fixed_delay: int) -> httpx.Response:
         """
-        Set a global fixed delay across all stubs.  To provider this on a per stub basis
-        configure the stub when creating one instead.
+        Configure a global fixed delay for all registered stubs. The response will not be returned
+        until after this delay.
+
+        :param fixed_delay: Number of milliseconds to wait before issuing the response.
         """
-        return self(method=HTTP_POST, url="/settings", payload={"fixedDelay": delay})
+        return self(method=HTTP_POST, url="/settings", payload=FixedDelay(fixed_delay), schema=FixedDelaySchema)
 
     @success_when(200)
     def reset(self) -> httpx.Response:

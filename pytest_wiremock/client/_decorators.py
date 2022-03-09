@@ -1,23 +1,6 @@
 import functools
-import typing
 
 import httpx
-
-from ._schemas import WmSchema
-
-
-def serialised_by(schema: typing.Type[WmSchema], schema_kwargs: typing.Optional[typing.Dict] = None):
-    """Serialise the user provided model by the schema provided."""
-
-    def deco(fn):
-        @functools.wraps(fn)
-        def wrapper(*args, **kwargs):
-            kwargs["payload"] = schema(**schema_kwargs or {}).dump(kwargs["model"])
-            return wrapper(*args, **kwargs)
-
-        return wrapper
-
-    return deco
 
 
 def success_when(code: int):

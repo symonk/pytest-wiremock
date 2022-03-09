@@ -4,5 +4,5 @@ from pytest_wiremock import WiremockClient
 
 
 @pytest.fixture(scope="session")
-def pytest_wiremock(request):
+def wiremock(request):
     return WiremockClient
