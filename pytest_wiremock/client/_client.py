@@ -29,6 +29,7 @@ class WiremockClient:
         self.host = f"http://{host}:{port}/__admin/"
         self.client = httpx.Client(base_url=self.host, timeout=timeout)
 
+    # --- Stub Code --- #
     @success_when(200)
     def delete_all_stubs(self) -> httpx.Response:
         """Delete all registered stubs"""
@@ -38,6 +39,12 @@ class WiremockClient:
     def reset_all_stubs(self) -> httpx.Response:
         """Reset all registered stubs to what is defined on disk in the backing store."""
         return self(method=HTTP_POST, url="/mappings/reset")
+
+    # --- Scenario Code --- #
+    @success_when(200)
+    def reset_scenarios(self) -> httpx.Response:
+        """Reset the state of all scenarios."""
+        return self(method=HTTP_POST, url="/scenarios/reset")
 
     @success_when(200)
     def get_settings(self) -> httpx.Response:
