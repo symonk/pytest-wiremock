@@ -66,8 +66,8 @@ class Request:
     url_path: str
     url_path_pattern: str
     url_pattern: str
-    query_parameters: typing.Dict
-    headers: typing.Dict
-    basic_auth_credentials: typing.Dict
-    cookies: typing.Dict
-    body_patterns: typing.Dict
+    query_parameters: typing.Dict[typing.Any, typing.Any]
+    headers: typing.Dict[typing.Any, typing.Any]
+    basic_auth_credentials: typing.Dict[typing.Any, typing.Any]
+    cookies: typing.Dict[typing.Any, typing.Any]
+    body_patterns: typing.Dict[typing.Any, typing.Any]

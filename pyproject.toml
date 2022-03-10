@@ -43,7 +43,7 @@ forced_separate = 'tests'
 skip = '.tox,.eggs,ci/templates'
 
 [tool.mypy]
-mypy_path = 'pytest_wiremock'
+mypy_path = 'pytest_wiremock/pytest_wiremock'
 check_untyped_defs = 'True'
 disallow_any_generics = 'True'
 ignore_missing_imports = 'False'

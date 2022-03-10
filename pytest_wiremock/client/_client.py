@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import typing
-from contextlib import AbstractContextManager
 
 import httpx
 
@@ -14,7 +13,7 @@ from ._models_schemas import FixedDelaySchema
 from ._models_schemas import WmSchema
 
 
-class WiremockClient(AbstractContextManager):
+class WiremockClient:
     """
     A (synchronous) python client for the wiremock admin API.
 
@@ -71,12 +70,15 @@ class WiremockClient(AbstractContextManager):
         url: str,
         payload: typing.Optional[typing.Any] = None,
         schema: typing.Optional[typing.Type[WmSchema]] = None,
-        schema_kw: typing.Optional[typing.Dict] = None,
+        schema_kw: typing.Optional[typing.Dict[typing.Any, typing.Any]] = None,
     ):
         """Dispatch a HTTP request"""
         if schema is not None:
             payload = schema(**schema_kw or {}).dump(payload)
         return self.client.request(method=method, url=url, json=payload)
+
+    def __enter__(self) -> WiremockClient:
+        return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.client.close()
