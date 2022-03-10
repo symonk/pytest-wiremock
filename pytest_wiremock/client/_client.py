@@ -5,6 +5,7 @@ from contextlib import AbstractContextManager
 
 import httpx
 
+from ._constants import HTTP_DELETE
 from ._constants import HTTP_GET
 from ._constants import HTTP_POST
 from ._decorators import success_when
@@ -28,6 +29,16 @@ class WiremockClient(AbstractContextManager):
     def __init__(self, host: str = "localhost", port: int = 8080, timeout: float = 30.00) -> None:
         self.host = f"http://{host}:{port}/__admin/"
         self.client = httpx.Client(base_url=self.host, timeout=timeout)
+
+    @success_when(200)
+    def delete_all_stubs(self) -> httpx.Response:
+        """Delete all registered stubs"""
+        return self(method=HTTP_DELETE, url="/mappings")
+
+    @success_when(200)
+    def reset_all_stubs(self) -> httpx.Response:
+        """Reset all registered stubs to what is defined on disk in the backing store."""
+        return self(method=HTTP_POST, url="/mappings/reset")
 
     @success_when(200)
     def get_settings(self) -> httpx.Response:
