@@ -7,7 +7,7 @@ name = "pytest_wiremock"
 version = "0.0.1"
 description = "A pytest plugin for programmatically using wiremock in integration tests"
 authors = ["symonk <jackofspaces@gmail.com>"]
-readme = "README.rst"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.8"

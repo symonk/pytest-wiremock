@@ -1,0 +1,32 @@
+name: pytest-wiremock testing
+'on':
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        python-version:
+          - 3.1
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'Set up Python ${{ matrix.python-version }}'
+        uses: actions/setup-python@v2
+        with:
+          python-version: '${{ matrix.python-version }}'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install tox
+          python -m pip install poetry
+          pip --version
+          tox --version
+          poetry --version
+      - name: Execute tests
+        run: |
+          tox -e py310
