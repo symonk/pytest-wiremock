@@ -13,6 +13,24 @@ class WmSchema(Schema):
     """Todo: Custom error handling etc later."""
 
 
+class ResponseDelay:
+    """An abstract response delay."""
+
+    type_ = fields.String(data_key="type")
+
+
+class LogNormalSchema(WmSchema):
+    median = fields.Integer()
+    sigma = fields.Integer()
+    type_ = fields.String(data_key="type", default="lognormal")
+
+
+class UniformDelaySchema(WmSchema):
+    lower = fields.Integer()
+    upper = fields.Integer()
+    type_ = fields.String(data_key="type", default="uniform")
+
+
 class FixedDelaySchema(WmSchema):
     """Schema for setting global fixed delay across all stubs."""
 
@@ -24,7 +42,7 @@ class FixedDelay:
     fixed_delay: int
 
 
-class RequestSchema(WmSchema):
+class StubRequestSchema(WmSchema):
     """Schema for (de)serialising stub requests."""
 
     method = fields.String()
@@ -40,7 +58,7 @@ class RequestSchema(WmSchema):
 
 
 @dataclass(eq=True, frozen=True)
-class Request:
+class StubRequest:
     method: str
     url: str
     url_path: str
@@ -53,13 +71,30 @@ class Request:
     body_patterns: typing.Dict[typing.Any, typing.Any]
 
 
-class ResponseSchema(WmSchema):
-    identity = fields.String(data_key="id")
-    uuid = fields.String()
-    name = fields.String()
+class _StubResponseContent(WmSchema):
+    delay_distribution = fields.Nested(...)
+    status = fields.Integer()
+    status_message = fields.String(data_key="statusMessage")
+    headers = fields.Dict()
+    additional_proxy_request_headers = fields.Dict(data_key="additionalProxyRequestHeaders")
+    # Todo: Only 1 of the following 3 can be specified; how does marshmallow handle that - validators?
+    body = fields.String()
+    base64_body = fields.String(data_key="base64Body")
+    json_body = fields.String(data_key="jsonBody")
+    body_file_name = fields.String(data_key="bodyFileName")
+    fault = fields.String()
+    fixed_delay_milliseconds = fields.Integer(data_key="fixedDelayMilliseconds")
+    from_configure_stub = fields.Boolean(data_key="fromConfigureStub")
+    proxy_base_url = fields.String(data_key="proxyBaseUrl")
+    transformer_parameters = fields.Dict(data_key="transformersParameters")
+    transformers = fields.List()
 
 
-class Response:
+class StubResponseSchema(WmSchema):
+    response = fields.Nested(_StubResponseContent)
+
+
+class StubResponse:
     ...
 
 
@@ -67,8 +102,8 @@ class StubSchema(WmSchema):
     identity = fields.String(data_key="id")
     uuid = fields.String()
     name = fields.String()
-    request = fields.Nested(RequestSchema)
-    response = fields.Nested(ResponseSchema)
+    request = fields.Nested(StubRequestSchema)
+    response = fields.Nested(StubResponseSchema)
     persistent = fields.Boolean()
     priority = fields.Integer(validate=validate.Range(min=1))
     scenario_name = fields.String(data_key="scenarioName")
