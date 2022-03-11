@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 import typing
+from types import TracebackType
 
 import httpx
+from httpx import ConnectError
 
 from ._constants import HTTP_DELETE
 from ._constants import HTTP_GET
 from ._constants import HTTP_POST
 from ._decorators import success_when
+from ._exceptions import WiremockConnectionError
 from ._models_schemas import FixedDelay
 from ._models_schemas import FixedDelaySchema
 from ._models_schemas import WmSchema
@@ -39,6 +42,28 @@ class WiremockClient:
     def reset_all_stubs(self) -> httpx.Response:
         """Reset all registered stubs to what is defined on disk in the backing store."""
         return self(method=HTTP_POST, url="/mappings/reset")
+
+    @success_when(200)
+    def save_stubs(self) -> httpx.Response:
+        """Save all persistent stubs to the backing store."""
+        return self(method=HTTP_POST, url="/mappings/save")
+
+    @success_when(200)
+    def delete_stub_with_uuid(self, uuid: str) -> httpx.Response:
+        """Delete the stub with a matching uuid."""
+        return self(method=HTTP_DELETE, url=f"/mappings/delete/{uuid}")
+
+    # --- Request Code --- #
+
+    @success_when(200)
+    def get_requests(self, limit: int, since: str) -> httpx.Response:
+        """Retrieve all requests within limit that have been recorded as of since."""
+        return self(method=HTTP_GET, url="/requests", params={"limit": limit, "since": since})
+
+    @success_when(200)
+    def delete_requests(self) -> httpx.Response:
+        """Delete all the requests."""
+        return self(method=HTTP_DELETE, url="/requests")
 
     # --- Scenario Code --- #
     @success_when(200)
@@ -76,18 +101,27 @@ class WiremockClient:
         method: str,
         url: str,
         payload: typing.Optional[typing.Any] = None,
+        params: typing.Optional[typing.Dict[str, typing.Any]] = None,
         schema: typing.Optional[typing.Type[WmSchema]] = None,
         schema_kw: typing.Optional[typing.Dict[typing.Any, typing.Any]] = None,
     ):
         """Dispatch a HTTP request"""
         if schema is not None:
             payload = schema(**schema_kw or {}).dump(payload)
-        return self.client.request(method=method, url=url, json=payload)
+        try:
+            return self.client.request(method=method, url=url, json=payload)
+        except ConnectError:
+            raise WiremockConnectionError(self.host) from None
 
     def __enter__(self) -> WiremockClient:
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(
+        self,
+        exc_type: typing.Optional[typing.Type[BaseException]] = None,
+        exc_val: typing.Optional[BaseException] = None,
+        exc_tb: typing.Optional[TracebackType] = None,
+    ):
         self.client.close()
 
     def __del__(self) -> None:

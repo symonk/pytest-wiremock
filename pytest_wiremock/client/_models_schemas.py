@@ -24,26 +24,6 @@ class FixedDelay:
     fixed_delay: int
 
 
-class StubSchema(WmSchema):
-    id_ = fields.String(data_key="id")
-    uuid = fields.String()
-    name = fields.String()
-    # request nested
-    # response nested
-    persistent = fields.Boolean()
-    priority = fields.Integer(validate=validate.Range(min=1))
-    scenario_name = fields.String(data_key="scenarioName")
-    required_scenario_state = fields.String(data_key="requiredScenarioState")
-    new_scenario_state = fields.String(data_key="newScenarioState")
-    post_serve_actions = fields.Dict()
-    metadata = fields.Dict()
-
-
-@dataclass(eq=True, frozen=True)
-class Stub:
-    ...
-
-
 class RequestSchema(WmSchema):
     """Schema for (de)serialising stub requests."""
 
@@ -71,3 +51,33 @@ class Request:
     basic_auth_credentials: typing.Dict[typing.Any, typing.Any]
     cookies: typing.Dict[typing.Any, typing.Any]
     body_patterns: typing.Dict[typing.Any, typing.Any]
+
+
+class ResponseSchema(WmSchema):
+    identity = fields.String(data_key="id")
+    uuid = fields.String()
+    name = fields.String()
+
+
+class Response:
+    ...
+
+
+class StubSchema(WmSchema):
+    identity = fields.String(data_key="id")
+    uuid = fields.String()
+    name = fields.String()
+    request = fields.Nested(RequestSchema)
+    response = fields.Nested(ResponseSchema)
+    persistent = fields.Boolean()
+    priority = fields.Integer(validate=validate.Range(min=1))
+    scenario_name = fields.String(data_key="scenarioName")
+    required_scenario_state = fields.String(data_key="requiredScenarioState")
+    new_scenario_state = fields.String(data_key="newScenarioState")
+    post_serve_actions = fields.Dict()
+    metadata = fields.Dict()
+
+
+@dataclass(eq=True, frozen=True)
+class Stub:
+    ...
