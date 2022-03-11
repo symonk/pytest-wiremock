@@ -3,7 +3,7 @@ import functools
 import httpx
 
 
-def success_when(code: int):
+def handle_response(expecting: int):
     """A simple decorator for enforcing expected response codes"""
 
     def deco(fn):
@@ -11,8 +11,8 @@ def success_when(code: int):
         def wrapper(*args, **kwargs):
             response: httpx.Response = fn(*args, **kwargs)
             rcode = response.status_code
-            if rcode != code:
-                raise ValueError(f"Unexpected status code for {fn.__name__}, expected: {code} | got: {rcode}")
+            if rcode != expecting:
+                raise ValueError(f"Unexpected status code for {fn.__name__}, expected: {expecting} | got: {rcode}")
             return response
 
         return wrapper
