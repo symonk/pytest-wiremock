@@ -5,10 +5,12 @@ from types import TracebackType
 
 import httpx
 from httpx import ConnectError
+from httpx import TimeoutException as HttpxTimeoutException
 
 from ._constants import HTTPVerbs
 from ._decorators import handle_response
-from ._exceptions import WiremockConnectionError
+from ._exceptions import WiremockConnectionException
+from ._exceptions import WiremockTimeoutException
 from ._models_schemas import FixedDelay
 from ._models_schemas import FixedDelaySchema
 from ._models_schemas import WmSchema
@@ -101,8 +103,10 @@ class Dispatcher:
             payload = schema(**schema_kw or {}).dump(payload)
         try:
             return self.client.request(method=method, url=url, json=payload)
+        except HttpxTimeoutException as exc:
+            raise WiremockTimeoutException(None, exc) from None
         except ConnectError:
-            raise WiremockConnectionError(self.host) from None
+            raise WiremockConnectionException(self.host) from None
 
 
 class SystemEndpoint:
