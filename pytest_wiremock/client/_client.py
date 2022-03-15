@@ -39,7 +39,7 @@ class WiremockClient:
         timeout: TimeoutTypes = 30.00,
         client_verify: VerifyTypes = False,
     ) -> None:
-        protocol = "http://" if not https else "https://"
+        protocol = "http" if not https else "https"
         self.host = f"{protocol}://{host}:{port}/__admin/"
         self.client = httpx.Client(base_url=self.host, timeout=timeout, verify=client_verify)
         self.dispatcher = Dispatcher(self.client, self.host)
