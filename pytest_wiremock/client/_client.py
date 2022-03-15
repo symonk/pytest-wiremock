@@ -33,12 +33,14 @@ class WiremockClient:
 
     def __init__(
         self,
+        https: bool = False,
         host: str = "localhost",
         port: int = 8080,
         timeout: TimeoutTypes = 30.00,
         client_verify: VerifyTypes = False,
     ) -> None:
-        self.host = f"http://{host}:{port}/__admin/"  # Todo: Support wiremock over https.
+        protocol = "http://" if not https else "https://"
+        self.host = f"{protocol}://{host}:{port}/__admin/"
         self.client = httpx.Client(base_url=self.host, timeout=timeout, verify=client_verify)
         self.dispatcher = Dispatcher(self.client, self.host)
         self.stubs = StubsEndpoint(self.dispatcher)
