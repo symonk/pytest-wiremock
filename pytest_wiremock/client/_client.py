@@ -104,7 +104,7 @@ class Dispatcher:
         try:
             return self.client.request(method=method, url=url, json=payload)
         except HttpxTimeoutException as exc:
-            raise WiremockTimeoutException(None, exc) from None
+            raise WiremockTimeoutException(None, str(exc)) from None
         except ConnectError:
             raise WiremockConnectionException(self.host) from None
 
