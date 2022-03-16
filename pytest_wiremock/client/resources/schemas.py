@@ -1,9 +1,3 @@
-"""
-Keep models and schemas tightly together to make future refactoring easier.
-"""
-import typing
-from dataclasses import dataclass
-
 from marshmallow import Schema
 from marshmallow import fields
 from marshmallow import validate
@@ -13,22 +7,10 @@ class WmSchema(Schema):
     """Todo: Custom error handling etc later."""
 
 
-class ResponseDelay:
-    """An abstract response delay."""
-
-    type_ = fields.String(data_key="type")
-
-
 class LogNormalSchema(WmSchema):
     median = fields.Integer()
     sigma = fields.Integer()
     type_ = fields.String(data_key="type", default="lognormal")
-
-
-class UniformDelaySchema(WmSchema):
-    lower = fields.Integer()
-    upper = fields.Integer()
-    type_ = fields.String(data_key="type", default="uniform")
 
 
 class FixedDelaySchema(WmSchema):
@@ -37,9 +19,10 @@ class FixedDelaySchema(WmSchema):
     fixed_delay = fields.Integer(data_key="fixedDelay")
 
 
-@dataclass(eq=True, frozen=True)
-class FixedDelay:
-    fixed_delay: int
+class UniformDelaySchema(WmSchema):
+    lower = fields.Integer()
+    upper = fields.Integer()
+    type_ = fields.String(data_key="type", default="uniform")
 
 
 class StubRequestSchema(WmSchema):
@@ -55,20 +38,6 @@ class StubRequestSchema(WmSchema):
     basic_auth_credentials = fields.Dict(data_key="basicAuthCredentials")
     cookies = fields.Dict()
     body_patterns = fields.Dict(data_key="bodyPatterns")
-
-
-@dataclass(eq=True, frozen=True)
-class StubRequest:
-    method: str
-    url: str
-    url_path: str
-    url_path_pattern: str
-    url_pattern: str
-    query_parameters: typing.Dict[typing.Any, typing.Any]
-    headers: typing.Dict[typing.Any, typing.Any]
-    basic_auth_credentials: typing.Dict[typing.Any, typing.Any]
-    cookies: typing.Dict[typing.Any, typing.Any]
-    body_patterns: typing.Dict[typing.Any, typing.Any]
 
 
 class _StubResponseContent(WmSchema):
@@ -94,10 +63,6 @@ class StubResponseSchema(WmSchema):
     response = fields.Nested(_StubResponseContent)
 
 
-class StubResponse:
-    ...
-
-
 class StubSchema(WmSchema):
     identity = fields.String(data_key="id")
     uuid = fields.String()
@@ -113,6 +78,7 @@ class StubSchema(WmSchema):
     metadata = fields.Dict()
 
 
-@dataclass(eq=True, frozen=True)
-class Stub:
-    ...
+class ResponseDelay:
+    """An abstract response delay."""
+
+    type_ = fields.String(data_key="type")
