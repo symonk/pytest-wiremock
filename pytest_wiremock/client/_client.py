@@ -19,7 +19,7 @@ from .endpoints import SystemEndpoint
 from .resources import WmSchema
 
 
-class WiremockFacade:
+class WiremockClient:
     """
     A (synchronous) python client for the wiremock admin API.
     The WiremockClient instance is a facade of various wiremock endpoints; to access the endpoints
@@ -53,7 +53,7 @@ class WiremockFacade:
         self.scenarios = ScenariosEndpoint(self.dispatcher)
         self.settings = SystemEndpoint(self.dispatcher)
 
-    def __enter__(self) -> WiremockFacade:
+    def __enter__(self) -> WiremockClient:
         return self
 
     def __exit__(
