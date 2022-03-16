@@ -1,3 +1,3 @@
-from .client import WiremockClient
+from .client import WiremockFacade
 
-__all__ = ["WiremockClient"]
+__all__ = ["WiremockFacade"]

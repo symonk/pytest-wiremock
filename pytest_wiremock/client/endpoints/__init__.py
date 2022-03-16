@@ -1,4 +1,3 @@
-from .dispatcher import Dispatcher
 from .near_misses import NearMissesEndpoint
 from .recordings import RecordingsEndpoint
 from .requests import RequestsEndpoint
@@ -13,5 +12,4 @@ __all__ = [
     "ScenariosEndpoint",
     "SystemEndpoint",
     "StubsEndpoint",
-    "Dispatcher",
 ]

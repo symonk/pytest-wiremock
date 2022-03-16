@@ -1,8 +1,8 @@
 import pytest
 
-from pytest_wiremock import WiremockClient
+from pytest_wiremock import WiremockFacade
 
 
 @pytest.fixture(scope="session")
 def wiremock(request):
-    return WiremockClient
+    return WiremockFacade

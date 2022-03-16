@@ -18,3 +18,11 @@ class WiremockConnectionException(WiremockApiException):
 
     def __init__(self, host: str) -> None:
         super().__init__(f"Unable to connect to a wiremock instance running on: {host}")
+
+
+class WiremockForbiddenException(WiremockApiException):
+    """Raised when wiremock returns a 401 forbidden."""
+
+
+class WiremockNotFoundException(WiremockApiException):
+    """Raised when wiremock returns a 404 not found."""

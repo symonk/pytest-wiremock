@@ -5,18 +5,21 @@ from types import TracebackType
 
 import httpx
 
+from ._exceptions import WiremockConnectionException
+from ._exceptions import WiremockForbiddenException
+from ._exceptions import WiremockTimeoutException
 from ._types import TimeoutTypes
 from ._types import VerifyTypes
-from .endpoints import Dispatcher
 from .endpoints import NearMissesEndpoint
 from .endpoints import RecordingsEndpoint
 from .endpoints import RequestsEndpoint
 from .endpoints import ScenariosEndpoint
 from .endpoints import StubsEndpoint
 from .endpoints import SystemEndpoint
+from .resources import WmSchema
 
 
-class WiremockClient:
+class WiremockFacade:
     """
     A (synchronous) python client for the wiremock admin API.
     The WiremockClient instance is a facade of various wiremock endpoints; to access the endpoints
@@ -38,12 +41,11 @@ class WiremockClient:
         port: int = 8080,
         timeout: TimeoutTypes = 30.00,
         client_verify: VerifyTypes = False,
-        dispatcher: typing.Callable[[httpx.Client, str], httpx.Response] = Dispatcher,
     ) -> None:
         protocol = "http" if not https else "https"
         self.host = f"{protocol}://{host}:{port}/__admin/"
         self.client = httpx.Client(base_url=self.host, timeout=timeout, verify=client_verify)
-        self.dispatcher = dispatcher(self.client, self.host)
+        self.dispatcher = Dispatcher(self.client, self.host)
         self.stubs = StubsEndpoint(self.dispatcher)
         self.requests = RequestsEndpoint(self.dispatcher)
         self.near_misses = NearMissesEndpoint(self.dispatcher)
@@ -51,7 +53,7 @@ class WiremockClient:
         self.scenarios = ScenariosEndpoint(self.dispatcher)
         self.settings = SystemEndpoint(self.dispatcher)
 
-    def __enter__(self) -> WiremockClient:
+    def __enter__(self) -> WiremockFacade:
         return self
 
     def __exit__(
@@ -64,3 +66,35 @@ class WiremockClient:
 
     def __del__(self) -> None:
         self.client.close()
+
+
+class Dispatcher:
+    def __init__(self, client: httpx.Client, host: str) -> None:
+        self.client = client
+        self.host = host
+
+    def __call__(
+        self,
+        *,
+        method: str,
+        url: str,
+        payload: typing.Optional[typing.Any] = None,
+        params: typing.Optional[typing.Dict[str, typing.Any]] = None,
+        schema: typing.Optional[typing.Type[WmSchema]] = None,
+        schema_kw: typing.Optional[typing.Dict[typing.Any, typing.Any]] = None,
+    ) -> httpx.Response:
+        """Dispatch a HTTP request.  We could implement this via __call__ but it should be private."""
+        if schema is not None:
+            payload = schema(**schema_kw or {}).dump(payload)
+        try:
+            response = self.client.request(method=method, url=url, json=payload)
+            status = response.status_code
+            if status in (200, 201):
+                # Successfully fetching/creating a resource.
+                return response
+            elif status == 401:
+                raise WiremockForbiddenException(status, response.text)
+        except httpx.TimeoutException as exc:
+            raise WiremockTimeoutException(str(exc)) from None
+        except httpx.ConnectError:
+            raise WiremockConnectionException(self.host) from None

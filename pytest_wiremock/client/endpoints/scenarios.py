@@ -1,6 +1,8 @@
 import httpx
 
-from .._decorators import handle_response
+from pytest_wiremock.client._protocols import DispatchCallable
+
+from ..verbs import HTTPVerbs
 
 
 class ScenariosEndpoint:
@@ -8,10 +10,9 @@ class ScenariosEndpoint:
     Facade into scenarios.
     """
 
-    def __init__(self, dispatcher) -> None:
+    def __init__(self, dispatcher: DispatchCallable) -> None:
         self.dispatcher = dispatcher
 
-    @handle_response(200)
     def reset_scenarios(self) -> httpx.Response:
         """Reset the state of all scenarios."""
-        return self.dispatcher.post(url="/scenarios/reset")
+        return self.dispatcher(method=HTTPVerbs.POST, url="/scenarios/reset")
