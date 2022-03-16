@@ -55,7 +55,7 @@ class Dispatcher:
         try:
             return self.client.request(method=method, url=url, json=payload)
         except HttpxTimeoutException as exc:
-            raise WiremockTimeoutException(None, str(exc)) from None
+            raise WiremockTimeoutException(str(exc)) from None
         except ConnectError:
             raise WiremockConnectionException(self.host) from None
 
@@ -136,6 +136,10 @@ class SystemEndpoint:
         """Shutdown the wire mock instance"""
         return self.dispatcher(method=HTTPVerbs.POST, url="/shutdown")
 
+    @handle_response(200)
+    def get_settings(self) -> httpx.Response:
+        return self.dispatcher(method=HTTPVerbs.GET, url="/settings")
+
 
 class StubsEndpoint:
     """
@@ -215,7 +219,3 @@ class ScenariosEndpoint:
     def reset_scenarios(self) -> httpx.Response:
         """Reset the state of all scenarios."""
         return self.dispatcher(method=HTTPVerbs.POST, url="/scenarios/reset")
-
-    @handle_response(200)
-    def get_settings(self) -> httpx.Response:
-        return self.dispatcher(method=HTTPVerbs.GET, url="/settings")

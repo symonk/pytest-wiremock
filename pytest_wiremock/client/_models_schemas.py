@@ -87,7 +87,7 @@ class _StubResponseContent(WmSchema):
     from_configure_stub = fields.Boolean(data_key="fromConfigureStub")
     proxy_base_url = fields.String(data_key="proxyBaseUrl")
     transformer_parameters = fields.Dict(data_key="transformersParameters")
-    transformers = fields.List()
+    transformers = fields.List(fields.String())
 
 
 class StubResponseSchema(WmSchema):
