@@ -14,14 +14,13 @@ def random_request() -> ...:
 
 @pytest.fixture
 def random_response() -> ...:
-    return StubResponse(body="Foobar!")
+    return StubResponse(status=206, body="Foobar!", status_message="My custom status message!")
 
 
 @pytest.fixture
 def random_stub(random_request, random_response) -> Stub:
     stub = Stub(
-        id_="100",
-        uuid=str(uuid.uuid4()),
+        id_=str(uuid.uuid4()),
         name="FooStub",
         request=random_request,
         response=random_response,
@@ -32,4 +31,4 @@ def random_stub(random_request, random_response) -> Stub:
 def test_creating_simple_stub_is_successful(wiremock, random_stub) -> None:
     with wiremock() as client:
         response = client.stubs.create_stub(random_stub)
-        assert response.status_code == 200
+        assert response.status_code == 201

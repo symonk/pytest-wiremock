@@ -1,4 +1,5 @@
 import typing
+import uuid
 
 from pytest_wiremock.client._types import UuidTypes
 
@@ -22,9 +23,9 @@ class StubRequest:
         self.url_path = url_path
         self.url_path_pattern = url_path_pattern
         self.url_pattern = url_pattern
-        self.query_parameters = query_parameters or {}
-        self.headers = headers or {}
-        self.body_patterns = body_patterns or {}
+        self.query_parameters = query_parameters
+        self.headers = headers
+        self.body_patterns = body_patterns
 
 
 class StubResponse:
@@ -42,8 +43,8 @@ class StubResponse:
         status: typing.Optional[int] = None,
     ) -> None:
         self.body = body
-        self.headers = headers or {}
-        self.transformers = transformers or {}
+        self.headers = headers
+        self.transformers = transformers
         self.fixed_delay_milliseconds = fixed_delay_milliseconds
         self.fault = fault
         self.from_configured_stub = from_configured_stub
@@ -61,7 +62,7 @@ class Stub:
         request: StubRequest,
         response: StubResponse,
         id_: typing.Optional[str] = None,
-        uuid: typing.Optional[UuidTypes] = None,
+        uuid_: typing.Optional[UuidTypes] = None,
         name: typing.Optional[str] = None,
         persistent: bool = False,
         priority: int = 1,
@@ -73,16 +74,16 @@ class Stub:
     ) -> None:
         self.request = request
         self.response = response
-        self.id_ = id_
-        self.uuid = uuid or ""
-        self.name = name or ""
+        self.id_ = id_ or str(uuid.uuid4())
+        self.uuid_ = uuid_
+        self.name = name
         self.persistent = persistent
         self.priority = priority
         self.scenario_name = scenario_name
         self.required_scenario_state = required_scenario_state
-        self.new_scenario_state = new_scenario_state or ""
-        self.post_serve_actions = post_serve_actions or {}
-        self.metadata = metadata or {}
+        self.new_scenario_state = new_scenario_state
+        self.post_serve_actions = post_serve_actions
+        self.metadata = metadata
 
 
 class FixedDelay:
