@@ -26,3 +26,7 @@ class WiremockForbiddenException(WiremockApiException):
 
 class WiremockNotFoundException(WiremockApiException):
     """Raised when wiremock returns a 404 not found."""
+
+
+class WiremockMalformedRequest(WiremockApiException):
+    """Raised when the dispatched requests does not conform to the servers schema and general standards."""

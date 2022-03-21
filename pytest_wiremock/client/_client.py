@@ -7,6 +7,8 @@ import httpx
 
 from ._exceptions import WiremockConnectionException
 from ._exceptions import WiremockForbiddenException
+from ._exceptions import WiremockMalformedRequest
+from ._exceptions import WiremockNotFoundException
 from ._exceptions import WiremockTimeoutException
 from ._types import TimeoutTypes
 from ._types import VerifyTypes
@@ -93,7 +95,13 @@ class Dispatcher:
                 # Successfully fetching/creating a resource.
                 return response
             elif status == 401:
-                raise WiremockForbiddenException(status, response.text)
+                raise WiremockForbiddenException(response.text, status)
+            elif status == 404:
+                raise WiremockNotFoundException(
+                    f"No wiremock instance running, {response.request.url} not found.", status
+                )
+            elif status == 422:
+                raise WiremockMalformedRequest(response.text, status)
         except httpx.TimeoutException as exc:
             raise WiremockTimeoutException(str(exc)) from None
         except httpx.ConnectError:

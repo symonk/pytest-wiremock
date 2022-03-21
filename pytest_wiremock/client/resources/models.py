@@ -1,41 +1,90 @@
 import typing
-from dataclasses import dataclass
+
+from pytest_wiremock.client._types import UuidTypes
 
 
-@dataclass(eq=True, frozen=True)
-class FixedDelay:
-    fixed_delay: int
-
-
-@dataclass(eq=True, frozen=True)
 class StubRequest:
-    method: str
-    url: str
-    url_path: str
-    url_path_pattern: str
-    url_pattern: str
-    query_parameters: typing.Dict[typing.Any, typing.Any]
-    headers: typing.Dict[typing.Any, typing.Any]
-    basic_auth_credentials: typing.Dict[typing.Any, typing.Any]
-    cookies: typing.Dict[typing.Any, typing.Any]
-    body_patterns: typing.Dict[typing.Any, typing.Any]
+    """Encapsulation of a stub mapping request."""
+
+    def __init__(
+        self,
+        method: str,
+        url: str,
+        url_path: typing.Optional[str] = None,
+        url_path_pattern: typing.Optional[str] = None,
+        url_pattern: typing.Optional[str] = None,
+        query_parameters: typing.Optional[typing.Dict[typing.Any, typing.Any]] = None,
+        headers: typing.Optional[typing.Dict[typing.Any, typing.Any]] = None,
+        body_patterns: typing.Optional[typing.Dict[typing.Any, typing.Any]] = None,
+    ) -> None:
+        self.method = method
+        self.url = url
+        self.url_path = url_path
+        self.url_path_pattern = url_path_pattern
+        self.url_pattern = url_pattern
+        self.query_parameters = query_parameters or {}
+        self.headers = headers or {}
+        self.body_patterns = body_patterns or {}
 
 
 class StubResponse:
-    ...
+    """Encapsulation of a stub mapping response."""
+
+    def __init__(
+        self,
+        body: str,
+        headers: typing.Optional[typing.Dict[typing.Any, typing.Any]] = None,
+        transformers: typing.Optional[typing.Dict[typing.Any, typing.Any]] = None,
+        fixed_delay_milliseconds: typing.Optional[int] = None,
+        fault: typing.Optional[str] = None,
+        from_configured_stub: bool = False,
+        status_message: typing.Optional[str] = None,
+        status: typing.Optional[int] = None,
+    ) -> None:
+        self.body = body
+        self.headers = headers or {}
+        self.transformers = transformers or {}
+        self.fixed_delay_milliseconds = fixed_delay_milliseconds
+        self.fault = fault
+        self.from_configured_stub = from_configured_stub
+        self.status_message = status_message
+        self.status = status
 
 
-@dataclass(eq=True, frozen=True)
 class Stub:
-    id_: int
-    uuid: str
-    name: str
-    request: StubRequest
-    response: StubResponse
-    persistent: bool
-    priority: int
-    scenario_name: str
-    required_scenario_state: str
-    new_scenario_state: str
-    post_serve_actions: typing.Dict[typing.Any, typing.Any]
-    metadata: typing.Dict[typing.Any, typing.Any]
+    """
+    An encapsulation of a stub mapping.
+    """
+
+    def __init__(
+        self,
+        request: StubRequest,
+        response: StubResponse,
+        id_: typing.Optional[str] = None,
+        uuid: typing.Optional[UuidTypes] = None,
+        name: typing.Optional[str] = None,
+        persistent: bool = False,
+        priority: int = 1,
+        scenario_name: typing.Optional[str] = None,
+        required_scenario_state: typing.Optional[str] = None,
+        new_scenario_state: typing.Optional[str] = None,
+        post_serve_actions: typing.Optional[typing.Dict[typing.Any, typing.Any]] = None,
+        metadata: typing.Optional[typing.Dict[typing.Any, typing.Any]] = None,
+    ) -> None:
+        self.request = request
+        self.response = response
+        self.id_ = id_
+        self.uuid = uuid or ""
+        self.name = name or ""
+        self.persistent = persistent
+        self.priority = priority
+        self.scenario_name = scenario_name
+        self.required_scenario_state = required_scenario_state
+        self.new_scenario_state = new_scenario_state or ""
+        self.post_serve_actions = post_serve_actions or {}
+        self.metadata = metadata or {}
+
+
+class FixedDelay:
+    def __init__(self, fixed_delay: int) -> None:
+        self.fixed_delay = fixed_delay

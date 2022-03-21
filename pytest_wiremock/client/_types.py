@@ -1,4 +1,5 @@
 import ssl
+import uuid
 from typing import Optional
 from typing import Tuple
 from typing import Union
@@ -11,3 +12,5 @@ TimeoutTypes = Union[
     Timeout,
 ]
 VerifyTypes = Union[str, bool, ssl.SSLContext]
+
+UuidTypes = Union[str, uuid.UUID]

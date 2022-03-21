@@ -4,6 +4,7 @@ from pytest_wiremock.client._protocols import DispatchCallable
 from pytest_wiremock.client._verbs import HTTPVerbs
 
 from ..resources.models import Stub
+from ..resources.schemas import StubSchema
 
 
 class StubsEndpoint:
@@ -36,7 +37,7 @@ class StubsEndpoint:
 
     def create_stub(self, stub: Stub) -> httpx.Response:
         """creates a new stub mapping."""
-        return self.dispatcher(method=HTTPVerbs.POST, url="/mappings/")
+        return self.dispatcher(method=HTTPVerbs.POST, url="/mappings", payload=stub, schema=StubSchema)
 
     def get_all_stubs(self) -> httpx.Response:
         """Get all stub mappings."""
