@@ -64,7 +64,7 @@ class StubResponseSchema(WmSchema):
 
 
 class StubSchema(WmSchema):
-    identity = fields.String(data_key="id")
+    id_ = fields.String(data_key="id")
     uuid = fields.String()
     name = fields.String()
     request = fields.Nested(StubRequestSchema)
