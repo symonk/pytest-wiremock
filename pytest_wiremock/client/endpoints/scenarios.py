@@ -2,7 +2,7 @@ import httpx
 
 from pytest_wiremock.client._protocols import DispatchCallable
 
-from .._verbs import HTTPVerbs
+from .._constants import HTTPVerbs
 
 
 class ScenariosEndpoint:

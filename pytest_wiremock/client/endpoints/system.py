@@ -1,6 +1,6 @@
 import httpx
 
-from pytest_wiremock.client._verbs import HTTPVerbs
+from pytest_wiremock.client._constants import HTTPVerbs
 
 from .._protocols import DispatchCallable
 from ..resources import FixedDelay

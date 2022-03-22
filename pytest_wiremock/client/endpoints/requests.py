@@ -1,7 +1,7 @@
 import httpx
 
+from pytest_wiremock.client._constants import HTTPVerbs
 from pytest_wiremock.client._protocols import DispatchCallable
-from pytest_wiremock.client._verbs import HTTPVerbs
 
 
 class RequestsEndpoint:
