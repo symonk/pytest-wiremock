@@ -5,21 +5,22 @@ from types import TracebackType
 
 import httpx
 
-from ._exceptions import WiremockConnectionException
-from ._exceptions import WiremockForbiddenException
-from ._exceptions import WiremockMalformedRequest
-from ._exceptions import WiremockNotFoundException
-from ._exceptions import WiremockServerException
-from ._exceptions import WiremockTimeoutException
+from pytest_wiremock.client._exceptions import WiremockConnectionException
+from pytest_wiremock.client._exceptions import WiremockForbiddenException
+from pytest_wiremock.client._exceptions import WiremockMalformedRequest
+from pytest_wiremock.client._exceptions import WiremockNotFoundException
+from pytest_wiremock.client._exceptions import WiremockServerException
+from pytest_wiremock.client._exceptions import WiremockTimeoutException
+
+from ._mappings_endpoint import MappingsEndpoint
+from ._near_misses_endpoint import NearMissesEndpoint
+from ._recordings_endpoint import RecordingsEndpoint
+from ._requests_endpoint import RequestsEndpoint
+from ._scenarios_endpoint import ScenariosEndpoint
+from ._schemas import WmSchema
+from ._system_endpoint import SystemEndpoint
 from ._types import TimeoutTypes
 from ._types import VerifyTypes
-from .endpoints import NearMissesEndpoint
-from .endpoints import RecordingsEndpoint
-from .endpoints import RequestsEndpoint
-from .endpoints import ScenariosEndpoint
-from .endpoints import StubsEndpoint
-from .endpoints import SystemEndpoint
-from .resources import WmSchema
 
 
 class WiremockClient:
@@ -49,7 +50,7 @@ class WiremockClient:
         self.host = f"{protocol}://{host}:{port}/__admin/"
         self.client = httpx.Client(base_url=self.host, timeout=timeout, verify=client_verify)
         self.dispatcher = Dispatcher(self.client, self.host)
-        self.stubs = StubsEndpoint(self.dispatcher)
+        self.stubs = MappingsEndpoint(self.dispatcher)
         self.requests = RequestsEndpoint(self.dispatcher)
         self.near_misses = NearMissesEndpoint(self.dispatcher)
         self.recordings = RecordingsEndpoint(self.dispatcher)

@@ -1,10 +1,10 @@
 import httpx
 
-from pytest_wiremock.client._constants import HTTPVerbs
+from pytest_wiremock._constants import HTTPVerbs
+from pytest_wiremock._protocols import DispatchCallable
 
-from .._protocols import DispatchCallable
-from ..resources import FixedDelay
-from ..resources import FixedDelaySchema
+from ._models import FixedDelay
+from ._schemas import FixedDelaySchema
 
 
 class SystemEndpoint:

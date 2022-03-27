@@ -2,7 +2,7 @@ import typing
 
 import httpx
 
-from .resources import WmSchema
+from .client._schemas import WmSchema
 
 
 class DispatchCallable(typing.Protocol):

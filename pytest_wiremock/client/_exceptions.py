@@ -34,7 +34,3 @@ class WiremockMalformedRequest(WiremockApiException):
 
 class WiremockServerException(WiremockApiException):
     """Raised when the wiremock server responds with a 500.  Often when an invalid/missing payload is sent."""
-
-
-class InvalidUUIDException(WiremockApiException):
-    """ Raised when uuid dependent endpoints are passed invalid uuid compliant strings. """

@@ -1,4 +1,4 @@
-from pytest_wiremock.client._protocols import DispatchCallable
+from pytest_wiremock._protocols import DispatchCallable
 
 
 class NearMissesEndpoint:

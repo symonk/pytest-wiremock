@@ -1,5 +1,17 @@
+from ._exceptions import ValidationException
+from .client import Stub
+from .client import StubRequest
+from .client import StubResponse
 from .client import WiremockClient
-from .client._exceptions import WiremockServerException
-from .client._exceptions import InvalidUUIDException
+from .client import WiremockServerException
+from .client import WmSchema
 
-__all__ = ["WiremockClient", "WiremockServerException", "InvalidUUIDException"]
+__all__ = [
+    "WiremockClient",
+    "WiremockServerException",
+    "Stub",
+    "StubRequest",
+    "StubResponse",
+    "WmSchema",
+    "ValidationException",
+]
