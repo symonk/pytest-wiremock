@@ -1,6 +1,8 @@
+import uuid
+
 import pytest
 
-from pytest_wiremock import WiremockServerException
+from pytest_wiremock import InvalidUUIDException
 
 
 def test_delete_stub_by_uuid_is_successful(connected_client, random_stub) -> None:
@@ -10,12 +12,15 @@ def test_delete_stub_by_uuid_is_successful(connected_client, random_stub) -> Non
     assert connected_client.stubs.get_all_stubs().json()["meta"]["total"] == 0
 
 
-def test_uuid_mismatch_raises_appropriately(connected_client, random_stub) -> None:
+def test_invalid_uuid_delete_raises(connected_client, random_stub) -> None:
     assert connected_client.stubs.create_stub(random_stub).status_code == 201
-    with pytest.raises(WiremockServerException) as exc:
-        connected_client.stubs.delete_stub_with_mapping_id("unknown")
-    assert exc.value.args[0] == b"Server Error"
-    assert exc.value.status_code == 500
+    with pytest.raises(InvalidUUIDException) as exc:
+        connected_client.stubs.delete_stub_with_mapping_id("badly_formatted_uuid")
+    assert exc.value.args[0] == "stub_mapping_id='badly_formatted_uuid' is not a valid UUID."
+
+
+def test_non_existent_compliant_uuid_returns_404(connected_client) -> None:
+    assert connected_client.stubs.delete_stub_with_mapping_id(str(uuid.uuid4())).status_code == 404
 
 
 def test_deleting_all_stubs_works_successfully(connected_client, multi_random_stubs) -> None:

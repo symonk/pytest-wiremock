@@ -2,9 +2,10 @@ import httpx
 
 from pytest_wiremock.client._constants import HTTPVerbs
 from pytest_wiremock.client._protocols import DispatchCallable
-
+import uuid
 from ..resources.models import Stub
 from ..resources.schemas import StubSchema
+from .._exceptions import InvalidUUIDException
 
 
 class StubsEndpoint:
@@ -25,14 +26,26 @@ class StubsEndpoint:
 
     def get_stub_with_mapping_id(self, stub_mapping_id: str) -> httpx.Response:
         """Get stub mapping by uuid."""
+        try:
+            _ = uuid.UUID(stub_mapping_id)
+        except ValueError:
+            raise InvalidUUIDException(f"{stub_mapping_id=} is not a valid UUID.") from None
         return self.dispatcher(method=HTTPVerbs.GET, url=f"/mappings/{stub_mapping_id}")
 
     def delete_stub_with_mapping_id(self, stub_mapping_id: str) -> httpx.Response:
         """Delete stub mapping by uuid."""
+        try:
+            _ = uuid.UUID(stub_mapping_id)
+        except ValueError:
+            raise InvalidUUIDException(f"{stub_mapping_id=} is not a valid UUID.") from None
         return self.dispatcher(method=HTTPVerbs.DELETE, url=f"/mappings/{stub_mapping_id}")
 
     def update_stub_with_mapping_id(self, stub_mapping_id: str) -> httpx.Response:
         """Update stub mapping by uuid."""
+        try:
+            _ = uuid.UUID(stub_mapping_id)
+        except ValueError:
+            raise InvalidUUIDException(f"{stub_mapping_id=} is not a valid UUID.") from None
         return self.dispatcher(method=HTTPVerbs.PUT, url=f"/mappings/{stub_mapping_id}")
 
     def create_stub(self, stub: Stub) -> httpx.Response:
