@@ -29,4 +29,8 @@ class WiremockNotFoundException(WiremockApiException):
 
 
 class WiremockMalformedRequest(WiremockApiException):
-    """Raised when the dispatched requests does not conform to the servers schema and general standards."""
+    """Raised when the dispatched requests do not conform to the servers schema and general standards."""
+
+
+class WiremockServerException(WiremockApiException):
+    """Raised when the wiremock server responds with a 500.  Often when an invalid/missing payload is sent."""

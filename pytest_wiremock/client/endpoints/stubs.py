@@ -39,7 +39,7 @@ class StubsEndpoint:
         """creates a new stub mapping."""
         return self.dispatcher(method=HTTPVerbs.POST, url="/mappings", payload=stub, schema=StubSchema)
 
-    def get_all_stubs(self) -> httpx.Response:
+    def get_all_stubs(self, limit: int = 10, offset: int = 0) -> httpx.Response:
         """Get all stub mappings."""
         return self.dispatcher(method=HTTPVerbs.GET, url="/mappings")
 
@@ -47,7 +47,7 @@ class StubsEndpoint:
         """Delete all stub mappings."""
         return self.dispatcher(method=HTTPVerbs.DELETE, url="/mappings")
 
-    def find_by_metadata(self, limit: int, offset: int) -> httpx.Response:
+    def find_by_metadata(self, limit: int = 10, offset: int = 0) -> httpx.Response:
         """Find stubs by matching on their metadata."""
         return self.dispatcher(method=HTTPVerbs.GET, url="/mappings")
 

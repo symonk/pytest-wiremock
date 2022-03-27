@@ -9,6 +9,7 @@ from ._exceptions import WiremockConnectionException
 from ._exceptions import WiremockForbiddenException
 from ._exceptions import WiremockMalformedRequest
 from ._exceptions import WiremockNotFoundException
+from ._exceptions import WiremockServerException
 from ._exceptions import WiremockTimeoutException
 from ._types import TimeoutTypes
 from ._types import VerifyTypes
@@ -31,7 +32,7 @@ class WiremockClient:
         :param host: The host of the running wiremock instance
         :param port: The port wiremock is listening on
         :param timeout: Configuration for connect, read, write & pool timeouts.
-        Timeout can be either a tuple of upto length 4; a single float (for all equal timeouts)
+        Timeout can be either a tuple of up to length 4; a single float (for all equal timeouts)
         or a httpx.Timeout instance.
         :param client_verify: configure ssl configurations; False by default and not checking SSL certs.
     """
@@ -85,7 +86,7 @@ class Dispatcher:
         schema: typing.Optional[typing.Type[WmSchema]] = None,
         schema_kw: typing.Optional[typing.Dict[typing.Any, typing.Any]] = None,
     ) -> httpx.Response:
-        """Dispatch a HTTP request.  We could implement this via __call__ but it should be private."""
+        """Dispatches HTTP requests.  We could implement this via __call__ but it should be private."""
         if schema is not None:
             payload = schema(**schema_kw or {}).dump(payload)
         try:
@@ -102,6 +103,8 @@ class Dispatcher:
                 )
             elif status == 422:
                 raise WiremockMalformedRequest(response.text, status)
+            elif status == 500:
+                raise WiremockServerException(response.extensions["reason_phrase"], status)
         except httpx.TimeoutException as exc:
             raise WiremockTimeoutException(str(exc)) from None
         except httpx.ConnectError:
