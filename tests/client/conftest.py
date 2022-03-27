@@ -43,3 +43,12 @@ def connected_client(wiremock_container) -> WiremockClient:
     """A Simple API client; connected to the running test wiremock instance."""
     with WiremockClient() as client:
         yield client
+
+
+@pytest.fixture(autouse=True)
+def _stub_destroyer(wiremock) -> None:
+    """ Destroys all stubs between tests to avoid state until function scoped container is implemented. """
+    # Todo: Remove this in favour of a function scoped container; will allow parallel testing etc.
+    with wiremock() as client:
+        client.stubs.reset_stub_mappings()
+        client.stubs.delete_all_stubs()
