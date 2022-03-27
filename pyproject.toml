@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "pytest_wiremock"
-version = "0.0.1"
+version = "0.1.0"
 description = "A pytest plugin for programmatically using wiremock in integration tests"
 authors = ["symonk <jackofspaces@gmail.com>"]
 readme = "README.md"
