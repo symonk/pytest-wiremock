@@ -1,7 +1,7 @@
 # pytest-wiremock
 A pytest plugin and DSL for easy integration testing with wiremock :rocket:
 
-[![PyPI version fury.io](https://badge.fury.io/py/pytest-wiremock.svg)](https://pypi.python.org/pypi/pytest-wiremock/)
+![PyPI](https://img.shields.io/pypi/v/pytest-wiremock?color=1&label=pytest-wiremock&style=flat-square)
 [![codecov](https://codecov.io/gh/symonk/pytest-wiremock/branch/main/graph/badge.svg?token=DT2823RGAG)](https://codecov.io/gh/symonk/pytest-wiremock)
 
 # Usage:
