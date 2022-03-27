@@ -1,6 +1,8 @@
 # pytest-wiremock
 A pytest plugin and DSL for easy integration testing with wiremock :rocket:
 
+[![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
+
 # Usage:
 
 ```python

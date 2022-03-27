@@ -32,7 +32,6 @@ jobs:
       - uses: actions/checkout@master
       - uses: codecov/codecov-action@v2
         with:
-          files: ../coverage.xml
           flags: pytest-wiremock unit & integration tests
           fail_ci_if_error: true
           verbose: true
