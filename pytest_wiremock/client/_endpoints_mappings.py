@@ -45,7 +45,7 @@ class MappingsEndpoint:
         return self.dispatcher(method=HTTPVerbs.POST, url="/mappings", payload=stub, schema=StubSchema)
 
     def create_stubs(self, stubs: typing.Iterable[Mapping]) -> typing.List[WiremockResponse]:
-        """Creates multiple stubs batch in one go.  (This is not an official wiremock API)."""
+        """Creates multiple mappings batch in one go.  (This is not an official wiremock API)."""
         return [self.create_stub(stub) for stub in stubs]
 
     def get_all_stubs(self, limit: int = 10, offset: int = 0) -> WiremockResponse:
@@ -57,7 +57,7 @@ class MappingsEndpoint:
         return self.dispatcher(method=HTTPVerbs.DELETE, url="/mappings")
 
     def find_by_metadata(self, limit: int = 10, offset: int = 0) -> WiremockResponse:
-        """Find stubs by matching on their metadata."""
+        """Find mappings by matching on their metadata."""
         return self.dispatcher(method=HTTPVerbs.GET, url="/mappings", params={"limit": limit, "offset": offset})
 
     def remove_by_metadata(self) -> WiremockResponse:

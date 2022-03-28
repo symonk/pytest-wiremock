@@ -11,7 +11,7 @@ class SystemEndpoint:
 
     def set_fixed_delay(self, fixed_delay: int) -> WiremockResponse:
         """
-        Configure a global fixed delay for all registered stubs. The response will not be returned
+        Configure a global fixed delay for all registered mappings. The response will not be returned
         until after this delay.
 
         :param fixed_delay: Number of milliseconds to wait before issuing the response.

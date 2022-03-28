@@ -23,7 +23,7 @@ class LogNormalSchema(WiremockSchema):
 
 
 class FixedDelaySchema(WiremockSchema):
-    """Schema for setting global fixed delay across all stubs."""
+    """Schema for setting global fixed delay across all mappings."""
 
     fixed_delay = fields.Integer(data_key="fixedDelay")
 
