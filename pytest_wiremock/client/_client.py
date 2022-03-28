@@ -77,7 +77,7 @@ class Dispatcher:
         self.client = client
         self.host = host
 
-    def __call__(
+    def __call__(  # type: ignore[return]
         self,
         *,
         method: str,
