@@ -1,6 +1,7 @@
 import typing
 import uuid
 
+import httpx
 import pytest
 
 from pytest_wiremock import Mapping
@@ -15,8 +16,24 @@ def random_request() -> ...:
 
 
 @pytest.fixture
+def request_factory() -> typing.Type[MappingRequest]:
+    return MappingRequest
+
+
+@pytest.fixture
+def response_factory() -> typing.Type[MappingResponse]:
+    return MappingResponse
+
+
+@pytest.fixture
 def random_response() -> ...:
     return MappingResponse(status=206, body="Foobar!", status_message="My custom status message!")
+
+
+@pytest.fixture
+def httpx_session(docker_ip) -> httpx.Client:
+    with httpx.Client(base_url="http://localhost:8080") as client:
+        yield client
 
 
 @pytest.fixture
@@ -28,6 +45,11 @@ def random_stub(random_request, random_response) -> Mapping:
         response=random_response,
     )
     return stub
+
+
+@pytest.fixture
+def stub_factory() -> typing.Type[Mapping]:
+    return Mapping
 
 
 @pytest.fixture

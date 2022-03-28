@@ -1,3 +1,5 @@
-from .api import Given, When, Then
+from .api import Given
+from .api import Then
+from .api import When
 
 __all__ = ["Given", "When", "Then"]

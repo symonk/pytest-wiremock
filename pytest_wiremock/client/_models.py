@@ -60,7 +60,7 @@ class Mapping:
     def __init__(
         self,
         request: MappingRequest,
-        response: MappingResponse,
+        response: typing.Optional[MappingResponse] = None,
         id_: typing.Optional[str] = None,
         uuid_: typing.Optional[UuidTypes] = None,
         name: typing.Optional[str] = None,

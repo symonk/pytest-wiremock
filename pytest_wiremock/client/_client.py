@@ -86,7 +86,7 @@ class Dispatcher:
         params: typing.Optional[typing.Dict[str, typing.Any]] = None,
         schema: typing.Optional[typing.Type[WiremockSchema]] = None,
         schema_kw: typing.Optional[typing.Dict[typing.Any, typing.Any]] = None,
-    ) -> httpx.Response:
+    ) -> WiremockResponse:
         """Dispatches HTTP requests.  We could implement this via __call__ but it should be private."""
         if schema is not None:
             payload = schema(**schema_kw or {}).dump(payload)

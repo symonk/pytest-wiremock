@@ -25,3 +25,9 @@ class WiremockResponse:
 
             return wrapper
         return attr
+
+    def __str__(self) -> str:
+        return str(self.delegate)
+
+    def __repr__(self) -> str:
+        return repr(self.delegate)
