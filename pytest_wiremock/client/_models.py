@@ -1,7 +1,8 @@
 import typing
 import uuid
 
-from pytest_wiremock.client._types import UuidTypes
+from ._types import FaultTypes
+from ._types import UuidTypes
 
 
 class MappingRequest:
@@ -37,7 +38,7 @@ class MappingResponse:
         headers: typing.Optional[typing.Dict[typing.Any, typing.Any]] = None,
         transformers: typing.Optional[typing.Dict[typing.Any, typing.Any]] = None,
         fixed_delay_milliseconds: typing.Optional[int] = None,
-        fault: typing.Optional[str] = None,
+        fault: typing.Optional[FaultTypes] = None,
         from_configured_stub: bool = False,
         status_message: typing.Optional[str] = None,
         status: typing.Optional[int] = None,
@@ -89,3 +90,12 @@ class Mapping:
 class FixedDelay:
     def __init__(self, fixed_delay: int) -> None:
         self.fixed_delay = fixed_delay
+
+
+# Todo: Build this 'dynamically' from a dictionary; support a few predefined option(s)
+class MetaData:
+    """
+    Arbitrary mapping of data to attach to a mapping as meta data.
+    Metadata is useful for fetching a mapping or even deleting a mapping
+    based on it's criteria.
+    """

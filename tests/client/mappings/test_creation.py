@@ -5,10 +5,10 @@ def test_creating_simple_stub_is_successful(connected_client, random_stub) -> No
 
 
 def test_priority_works_successfully(
-    connected_client, stub_factory, request_factory, response_factory, httpx_session
+    connected_client, mapping_factory, request_factory, response_factory, httpx_session
 ) -> None:
-    one = stub_factory(request_factory("GET", "/foo"), response_factory(body="first", status=202), priority=2)
-    two = stub_factory(
+    one = mapping_factory(request_factory("GET", "/foo"), response_factory(body="first", status=202), priority=2)
+    two = mapping_factory(
         request_factory(
             "GET",
             "/foo",

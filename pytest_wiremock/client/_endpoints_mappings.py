@@ -58,7 +58,7 @@ class MappingsEndpoint:
 
     def find_by_metadata(self, limit: int = 10, offset: int = 0) -> WiremockResponse:
         """Find mappings by matching on their metadata."""
-        return self.dispatcher(method=HTTPVerbs.GET, url="/mappings", params={"limit": limit, "offset": offset})
+        return self.dispatcher(method=HTTPVerbs.POST, url="/mappings", params={"limit": limit, "offset": offset})
 
     def remove_by_metadata(self) -> WiremockResponse:
         return self.dispatcher(method=HTTPVerbs.DELETE, url="/mappings")

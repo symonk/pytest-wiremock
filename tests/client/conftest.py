@@ -48,7 +48,7 @@ def random_stub(random_request, random_response) -> Mapping:
 
 
 @pytest.fixture
-def stub_factory() -> typing.Type[Mapping]:
+def mapping_factory() -> typing.Type[Mapping]:
     return Mapping
 
 
