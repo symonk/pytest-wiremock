@@ -1,9 +1,12 @@
+import uuid
+
 import httpx
 
 from pytest_wiremock._constants import HTTPVerbs
 from pytest_wiremock._protocols import DispatchCallable
 from pytest_wiremock.client._models import Stub
 from pytest_wiremock.client._schemas import StubSchema
+from .._exceptions import ValidationException
 
 
 class MappingsEndpoint:
@@ -24,14 +27,17 @@ class MappingsEndpoint:
 
     def get_stub_with_mapping_id(self, stub_mapping_id: str) -> httpx.Response:
         """Get stub mapping by uuid."""
+        self._validate_uuid(stub_mapping_id)
         return self.dispatcher(method=HTTPVerbs.GET, url=f"/mappings/{stub_mapping_id}")
 
     def delete_stub_with_mapping_id(self, stub_mapping_id: str) -> httpx.Response:
         """Delete stub mapping by uuid."""
+        self._validate_uuid(stub_mapping_id)
         return self.dispatcher(method=HTTPVerbs.DELETE, url=f"/mappings/{stub_mapping_id}")
 
     def update_stub_with_mapping_id(self, stub_mapping_id: str) -> httpx.Response:
         """Update stub mapping by uuid."""
+        self._validate_uuid(stub_mapping_id)
         return self.dispatcher(method=HTTPVerbs.PUT, url=f"/mappings/{stub_mapping_id}")
 
     def create_stub(self, stub: Stub) -> httpx.Response:
@@ -52,3 +58,11 @@ class MappingsEndpoint:
 
     def remove_by_metadata(self) -> httpx.Response:
         return self.dispatcher(method=HTTPVerbs.DELETE, url="/mappings")
+
+    @staticmethod
+    def _validate_uuid(_uuid: str) -> None:
+        """ Enforce the uuid is properly formatted and compliant."""
+        try:
+            uuid.UUID(_uuid)
+        except ValueError:
+            raise ValidationException(f"uuid={_uuid} is not a valid uuid.") from None

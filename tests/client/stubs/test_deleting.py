@@ -3,6 +3,7 @@ import uuid
 import pytest
 
 from pytest_wiremock import ValidationException
+from pytest_wiremock.client._exceptions import WiremockNotFoundException
 
 
 def test_delete_stub_by_uuid_is_successful(connected_client, random_stub) -> None:
@@ -11,17 +12,18 @@ def test_delete_stub_by_uuid_is_successful(connected_client, random_stub) -> Non
     assert connected_client.stubs.delete_stub_with_mapping_id(random_stub.id_).status_code == 200
     assert connected_client.stubs.get_all_stubs().json()["meta"]["total"] == 0
 
-@pytest.mark.skip("Enforce validation errors")
+
 def test_invalid_uuid_delete_raises(connected_client, random_stub) -> None:
+    bad_stub_id = "badly_formatted_uuid"
     assert connected_client.stubs.create_stub(random_stub).status_code == 201
     with pytest.raises(ValidationException) as exc:
-        connected_client.stubs.delete_stub_with_mapping_id("badly_formatted_uuid")
-    assert exc.value.args[0] == "stub_mapping_id='badly_formatted_uuid' is not a valid UUID."
+        connected_client.stubs.delete_stub_with_mapping_id(bad_stub_id)
+    assert exc.value.args[0] == f"uuid={bad_stub_id} is not a valid uuid."
 
 
-@pytest.mark.skip("Enforce validation errors")
 def test_non_existent_compliant_uuid_returns_404(connected_client) -> None:
-    assert connected_client.stubs.delete_stub_with_mapping_id(str(uuid.uuid4())).status_code == 404
+    with pytest.raises(WiremockNotFoundException):
+        assert connected_client.stubs.delete_stub_with_mapping_id(str(uuid.uuid4())).status_code == 404
 
 
 def test_deleting_all_stubs_works_successfully(connected_client, multi_random_stubs) -> None:
