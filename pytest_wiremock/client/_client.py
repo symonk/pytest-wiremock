@@ -5,20 +5,20 @@ from types import TracebackType
 
 import httpx
 
-from pytest_wiremock.client._exceptions import WiremockConnectionException
-from pytest_wiremock.client._exceptions import WiremockForbiddenException
-from pytest_wiremock.client._exceptions import WiremockMalformedRequest
-from pytest_wiremock.client._exceptions import WiremockNotFoundException
-from pytest_wiremock.client._exceptions import WiremockServerException
-from pytest_wiremock.client._exceptions import WiremockTimeoutException
-
 from ._endpoints_mappings import MappingsEndpoint
 from ._endpoints_near_misses import NearMissesEndpoint
 from ._endpoints_recordings import RecordingsEndpoint
 from ._endpoints_requests import RequestsEndpoint
 from ._endpoints_scenarios import ScenariosEndpoint
-from ._schemas import WmSchema
 from ._endpoints_system import SystemEndpoint
+from ._exceptions import WiremockConnectionException
+from ._exceptions import WiremockForbiddenException
+from ._exceptions import WiremockMalformedRequest
+from ._exceptions import WiremockNotFoundException
+from ._exceptions import WiremockServerException
+from ._exceptions import WiremockTimeoutException
+from ._response import WiremockResponse
+from ._schemas import WiremockSchema
 from ._types import TimeoutTypes
 from ._types import VerifyTypes
 
@@ -84,28 +84,28 @@ class Dispatcher:
         url: str,
         payload: typing.Optional[typing.Any] = None,
         params: typing.Optional[typing.Dict[str, typing.Any]] = None,
-        schema: typing.Optional[typing.Type[WmSchema]] = None,
+        schema: typing.Optional[typing.Type[WiremockSchema]] = None,
         schema_kw: typing.Optional[typing.Dict[typing.Any, typing.Any]] = None,
     ) -> httpx.Response:
         """Dispatches HTTP requests.  We could implement this via __call__ but it should be private."""
         if schema is not None:
             payload = schema(**schema_kw or {}).dump(payload)
         try:
-            response = self.client.request(method=method, url=url, json=payload)
-            status = response.status_code
+            httpx_response = self.client.request(method=method, url=url, json=payload)
+            status = httpx_response.status_code
             if status in (200, 201):
                 # Successfully fetching/creating a resource.
-                return response
+                return WiremockResponse(httpx_response)
             elif status == 401:
-                raise WiremockForbiddenException(response.text, status)
+                raise WiremockForbiddenException(httpx_response.text, status)
             elif status == 404:
                 raise WiremockNotFoundException(
-                    f"No wiremock instance running, {response.request.url} not found.", status
+                    f"No wiremock instance running, {httpx_response.request.url} not found.", status
                 )
             elif status == 422:
-                raise WiremockMalformedRequest(response.text, status)
+                raise WiremockMalformedRequest(httpx_response.text, status)
             elif status == 500:
-                raise WiremockServerException(response.extensions["reason_phrase"], status)
+                raise WiremockServerException(httpx_response.extensions["reason_phrase"], status)
         except httpx.TimeoutException as exc:
             raise WiremockTimeoutException(str(exc)) from None
         except httpx.ConnectError:

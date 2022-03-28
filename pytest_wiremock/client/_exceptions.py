@@ -34,3 +34,7 @@ class WiremockMalformedRequest(WiremockApiException):
 
 class WiremockServerException(WiremockApiException):
     """Raised when the wiremock server responds with a 500.  Often when an invalid/missing payload is sent."""
+
+
+class ValidationException(Exception):
+    """Raised when a validation predicate fails."""

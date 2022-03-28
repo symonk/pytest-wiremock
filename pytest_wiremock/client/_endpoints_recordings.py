@@ -1,4 +1,4 @@
-from pytest_wiremock._protocols import DispatchCallable
+from pytest_wiremock.client._protocols import Requestable
 
 
 class RecordingsEndpoint:
@@ -6,5 +6,5 @@ class RecordingsEndpoint:
     Facade into recordings.
     """
 
-    def __init__(self, dispatcher: DispatchCallable) -> None:
+    def __init__(self, dispatcher: Requestable) -> None:
         self.dispatcher = dispatcher

@@ -7,7 +7,7 @@ from marshmallow import post_load
 from marshmallow import validate
 
 
-class WmSchema(Schema):
+class WiremockSchema(Schema):
     """Todo: Custom error handling etc later."""
 
     @staticmethod
@@ -16,25 +16,25 @@ class WmSchema(Schema):
         return {k: v for k, v in data.items() if v is not None}
 
 
-class LogNormalSchema(WmSchema):
+class LogNormalSchema(WiremockSchema):
     median = fields.Integer()
     sigma = fields.Integer()
     type_ = fields.String(data_key="type", default="lognormal")
 
 
-class FixedDelaySchema(WmSchema):
+class FixedDelaySchema(WiremockSchema):
     """Schema for setting global fixed delay across all stubs."""
 
     fixed_delay = fields.Integer(data_key="fixedDelay")
 
 
-class UniformDelaySchema(WmSchema):
+class UniformDelaySchema(WiremockSchema):
     lower = fields.Integer()
     upper = fields.Integer()
     type_ = fields.String(data_key="type", default="uniform")
 
 
-class StubRequestSchema(WmSchema):
+class StubRequestSchema(WiremockSchema):
     """Schema for (de)serialising stub requests."""
 
     method = fields.String()
@@ -53,7 +53,7 @@ class StubRequestSchema(WmSchema):
         return self.drop_nones(data)
 
 
-class StubResponseContentSchema(WmSchema):
+class StubResponseContentSchema(WiremockSchema):
     delay_distribution = fields.Nested(...)
     status = fields.Integer()
     status_message = fields.String(data_key="statusMessage")
@@ -76,7 +76,7 @@ class StubResponseContentSchema(WmSchema):
         return self.drop_nones(data)
 
 
-class StubSchema(WmSchema):
+class StubSchema(WiremockSchema):
     id_ = fields.String(data_key="id")
     uuid = fields.String()
     name = fields.String()

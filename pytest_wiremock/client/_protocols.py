@@ -1,11 +1,10 @@
 import typing
 
-import httpx
+from ._response import WiremockResponse
+from ._schemas import WiremockSchema
 
-from .client._schemas import WmSchema
 
-
-class DispatchCallable(typing.Protocol):
+class Requestable(typing.Protocol):
     def __call__(
         self,
         *,
@@ -13,7 +12,7 @@ class DispatchCallable(typing.Protocol):
         url: str,
         payload: typing.Optional[typing.Any] = None,
         params: typing.Optional[typing.Dict[str, typing.Any]] = None,
-        schema: typing.Optional[typing.Type[WmSchema]] = None,
+        schema: typing.Optional[typing.Type[WiremockSchema]] = None,
         schema_kw: typing.Optional[typing.Dict[typing.Any, typing.Any]] = None,
-    ) -> httpx.Response:
+    ) -> WiremockResponse:
         ...

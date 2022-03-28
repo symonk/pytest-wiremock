@@ -1,6 +1,6 @@
 import pytest
 
-from pytest_wiremock.client._exceptions import WiremockConnectionException
+from pytest_wiremock import WiremockConnectionException
 
 
 def test_connection_failed(wiremock) -> None:

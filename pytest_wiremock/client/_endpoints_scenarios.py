@@ -1,7 +1,6 @@
-import httpx
-
-from pytest_wiremock._constants import HTTPVerbs
-from pytest_wiremock._protocols import DispatchCallable
+from ._constants import HTTPVerbs
+from ._protocols import Requestable
+from ._response import WiremockResponse
 
 
 class ScenariosEndpoint:
@@ -9,9 +8,9 @@ class ScenariosEndpoint:
     Facade into scenarios.
     """
 
-    def __init__(self, dispatcher: DispatchCallable) -> None:
+    def __init__(self, dispatcher: Requestable) -> None:
         self.dispatcher = dispatcher
 
-    def reset_scenarios(self) -> httpx.Response:
+    def reset_scenarios(self) -> WiremockResponse:
         """Reset the state of all scenarios."""
         return self.dispatcher(method=HTTPVerbs.POST, url="/scenarios/reset")
