@@ -1,3 +1,5 @@
+import typing
+
 import httpx
 
 
@@ -8,6 +10,10 @@ class WiremockResponse:
 
     def __init__(self, delegate: httpx.Response) -> None:
         self.delegate = delegate
+        self.status_code = delegate.status_code
+
+    def json(self, **kwargs: typing.Any) -> typing.Any:
+        return self.delegate.json(**kwargs)
 
     def __getattr__(self, item: str):
         """Dynamic dispatch to the underlying response."""
