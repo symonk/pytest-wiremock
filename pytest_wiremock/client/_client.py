@@ -12,13 +12,13 @@ from pytest_wiremock.client._exceptions import WiremockNotFoundException
 from pytest_wiremock.client._exceptions import WiremockServerException
 from pytest_wiremock.client._exceptions import WiremockTimeoutException
 
-from ._mappings_endpoint import MappingsEndpoint
-from ._near_misses_endpoint import NearMissesEndpoint
-from ._recordings_endpoint import RecordingsEndpoint
-from ._requests_endpoint import RequestsEndpoint
-from ._scenarios_endpoint import ScenariosEndpoint
+from ._endpoints_mappings import MappingsEndpoint
+from ._endpoints_near_misses import NearMissesEndpoint
+from ._endpoints_recordings import RecordingsEndpoint
+from ._endpoints_requests import RequestsEndpoint
+from ._endpoints_scenarios import ScenariosEndpoint
 from ._schemas import WmSchema
-from ._system_endpoint import SystemEndpoint
+from ._endpoints_system import SystemEndpoint
 from ._types import TimeoutTypes
 from ._types import VerifyTypes
 
