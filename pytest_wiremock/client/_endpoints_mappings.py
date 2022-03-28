@@ -2,7 +2,7 @@ import uuid
 
 from ._constants import HTTPVerbs
 from ._exceptions import ValidationException
-from ._models import Stub
+from ._models import Mapping
 from ._protocols import Requestable
 from ._response import WiremockResponse
 from ._schemas import StubSchema
@@ -39,7 +39,7 @@ class MappingsEndpoint:
         self._validate_uuid(stub_mapping_id)
         return self.dispatcher(method=HTTPVerbs.PUT, url=f"/mappings/{stub_mapping_id}")
 
-    def create_stub(self, stub: Stub) -> WiremockResponse:
+    def create_stub(self, stub: Mapping) -> WiremockResponse:
         """creates a new stub mapping."""
         return self.dispatcher(method=HTTPVerbs.POST, url="/mappings", payload=stub, schema=StubSchema)
 

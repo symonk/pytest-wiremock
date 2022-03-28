@@ -3,25 +3,25 @@ import uuid
 
 import pytest
 
-from pytest_wiremock import Stub
-from pytest_wiremock import StubRequest
-from pytest_wiremock import StubResponse
+from pytest_wiremock import Mapping
+from pytest_wiremock import MappingRequest
+from pytest_wiremock import MappingResponse
 from pytest_wiremock import WiremockClient
 
 
 @pytest.fixture
 def random_request() -> ...:
-    return StubRequest(method="GET", url="/foo/bar")
+    return MappingRequest(method="GET", url="/foo/bar")
 
 
 @pytest.fixture
 def random_response() -> ...:
-    return StubResponse(status=206, body="Foobar!", status_message="My custom status message!")
+    return MappingResponse(status=206, body="Foobar!", status_message="My custom status message!")
 
 
 @pytest.fixture
-def random_stub(random_request, random_response) -> Stub:
-    stub = Stub(
+def random_stub(random_request, random_response) -> Mapping:
+    stub = Mapping(
         id_=str(uuid.uuid4()),
         name="FooStub",
         request=random_request,
@@ -31,9 +31,9 @@ def random_stub(random_request, random_response) -> Stub:
 
 
 @pytest.fixture
-def multi_random_stubs(random_request, random_response) -> typing.List[Stub]:
+def multi_random_stubs(random_request, random_response) -> typing.List[Mapping]:
     return [
-        Stub(id_=str(uuid.uuid4()), name=f"Random{n}", request=random_request, response=random_response)
+        Mapping(id_=str(uuid.uuid4()), name=f"Random{n}", request=random_request, response=random_response)
         for n in range(2)
     ]
 

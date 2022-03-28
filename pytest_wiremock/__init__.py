@@ -1,6 +1,6 @@
-from .client import Stub
-from .client import StubRequest
-from .client import StubResponse
+from .client import Mapping
+from .client import MappingRequest
+from .client import MappingResponse
 from .client import ValidationException
 from .client import WiremockClient
 from .client import WiremockConnectionException
@@ -10,9 +10,9 @@ from .client import WiremockServerException
 __all__ = [
     "WiremockClient",
     "WiremockServerException",
-    "Stub",
-    "StubRequest",
-    "StubResponse",
+    "Mapping",
+    "MappingRequest",
+    "MappingResponse",
     "WiremockSchema",
     "ValidationException",
     "WiremockConnectionException",

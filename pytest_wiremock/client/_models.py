@@ -4,7 +4,7 @@ import uuid
 from pytest_wiremock.client._types import UuidTypes
 
 
-class StubRequest:
+class MappingRequest:
     """Encapsulation of a stub mapping request."""
 
     def __init__(
@@ -28,7 +28,7 @@ class StubRequest:
         self.body_patterns = body_patterns
 
 
-class StubResponse:
+class MappingResponse:
     """Encapsulation of a stub mapping response."""
 
     def __init__(
@@ -52,15 +52,15 @@ class StubResponse:
         self.status = status
 
 
-class Stub:
+class Mapping:
     """
     An encapsulation of a stub mapping.
     """
 
     def __init__(
         self,
-        request: StubRequest,
-        response: StubResponse,
+        request: MappingRequest,
+        response: MappingResponse,
         id_: typing.Optional[str] = None,
         uuid_: typing.Optional[UuidTypes] = None,
         name: typing.Optional[str] = None,
