@@ -92,6 +92,7 @@ class Dispatcher:
             payload = schema(**schema_kw or {}).dump(payload)
         try:
             httpx_response = self.client.request(method=method, url=url, json=payload)
+            print(httpx_response.request.content, httpx_response.request.url)
             status = httpx_response.status_code
             if status in (200, 201):
                 # Successfully fetching/creating a resource.

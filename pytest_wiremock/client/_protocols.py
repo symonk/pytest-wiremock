@@ -16,3 +16,8 @@ class Requestable(typing.Protocol):
         schema_kw: typing.Optional[typing.Dict[typing.Any, typing.Any]] = None,
     ) -> WiremockResponse:
         ...
+
+
+class Queryable(typing.Protocol):
+    def to_payload(self) -> typing.Dict[typing.Any, typing.Any]:
+        ...

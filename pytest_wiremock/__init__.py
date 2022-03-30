@@ -1,6 +1,7 @@
 from .client import Mapping
 from .client import MappingRequest
 from .client import MappingResponse
+from .client import MatchingJsonPath
 from .client import ValidationException
 from .client import WiremockClient
 from .client import WiremockConnectionException
@@ -16,4 +17,5 @@ __all__ = [
     "WiremockSchema",
     "ValidationException",
     "WiremockConnectionException",
+    "MatchingJsonPath",
 ]

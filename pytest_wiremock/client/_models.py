@@ -92,7 +92,6 @@ class FixedDelay:
         self.fixed_delay = fixed_delay
 
 
-# Todo: Build this 'dynamically' from a dictionary; support a few predefined option(s)
 class MetaData:
     """
     Arbitrary mapping of data to attach to a mapping as meta data.

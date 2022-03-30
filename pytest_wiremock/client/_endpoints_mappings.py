@@ -4,6 +4,7 @@ import uuid
 from ._constants import HTTPVerbs
 from ._exceptions import ValidationException
 from ._models import Mapping
+from ._protocols import Queryable
 from ._protocols import Requestable
 from ._response import WiremockResponse
 from ._schemas import StubSchema
@@ -56,9 +57,14 @@ class MappingsEndpoint:
         """Delete all stub mappings."""
         return self.dispatcher(method=HTTPVerbs.DELETE, url="/mappings")
 
-    def find_by_metadata(self, limit: int = 10, offset: int = 0) -> WiremockResponse:
+    def find_by_metadata(self, meta_data: Queryable, limit: int = 10, offset: int = 0) -> WiremockResponse:
         """Find mappings by matching on their metadata."""
-        return self.dispatcher(method=HTTPVerbs.POST, url="/mappings", params={"limit": limit, "offset": offset})
+        return self.dispatcher(
+            method=HTTPVerbs.POST,
+            payload=meta_data.to_payload(),
+            url="/mappings",
+            params={"limit": limit, "offset": offset},
+        )
 
     def remove_by_metadata(self) -> WiremockResponse:
         return self.dispatcher(method=HTTPVerbs.DELETE, url="/mappings")

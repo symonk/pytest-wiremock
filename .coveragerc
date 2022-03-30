@@ -6,4 +6,3 @@ source = pytest_wiremock/
 sort = -Cover
 skip_empty = True
 precision = 2
-
