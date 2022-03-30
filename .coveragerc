@@ -1,0 +1,9 @@
+[run]
+source = pytest_wiremock/
+
+
+[report]
+sort = -Cover
+skip_empty = True
+precision = 2
+
