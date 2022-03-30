@@ -1,7 +1,7 @@
 exclude: ^(.tox|doc|ci/templates|)(/|$)
 repos:
   - repo: https://github.com/ambv/black
-    rev: f239d227c003c52126239e1b9a37c36c2b2b8305
+    rev: 2d62a09e838d2df98961e6e93036abad54f28c5f
     hooks:
       - id: black
         args:
@@ -30,7 +30,7 @@ repos:
       - id: mypy
         files: pytest_wiremock/
   - repo: https://github.com/PyCQA/flake8
-    rev: ddb04f758fcd8d145d5dcb4d0ab1ae3eecc59020
+    rev: 1eb078ac987519deee0e6d7a118c7b8e02b98a8c
     hooks:
       - id: flake8
         args: ["--max-line-length=120"]
