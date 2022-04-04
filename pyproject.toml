@@ -19,7 +19,7 @@ coverage = "^6.3.2"
 [tool.poetry.dev-dependencies]
 codecov = "^2.1.12"
 ipython = "^8.0.1"
-pre-commit = "^2.16.0"
+pre-commit = "^2.18.1"
 mkdocs = "^1.2.3"
 mkdocs-material = "^8.2.7"
 mkdocstrings = "^0.18.0"
